@@ -1,4 +1,4 @@
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient } from "graphql-request";
 
 interface ShopifyMetafieldReference {
   fields: Array<{
@@ -21,7 +21,7 @@ interface ShopifyImage {
   edges: Array<{
     node: {
       url: string;
-    }
+    };
   }>;
 }
 
@@ -32,8 +32,8 @@ interface ShopifyVariant {
       price: {
         amount: string;
         currencyCode: string;
-      }
-    }
+      };
+    };
   }>;
 }
 
@@ -61,13 +61,28 @@ interface ProductByHandleResponse {
 
 // Initialize GraphQL client with Shopify's Storefront API endpoint
 const storefrontClient = new GraphQLClient(
-  `https://${import.meta.env.VITE_SHOPIFY_STORE_DOMAIN}/api/2024-01/graphql.json`,
+  `https://${
+    import.meta.env.VITE_SHOPIFY_STORE_DOMAIN
+  }/api/2024-01/graphql.json`,
   {
     headers: {
-      'X-Shopify-Storefront-Access-Token': import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN || '',
-      'Content-Type': 'application/json',
+      "X-Shopify-Storefront-Access-Token":
+        import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN || "",
+      "Content-Type": "application/json",
     },
   }
+);
+
+// Add this debug log after client initialization
+console.log(
+  "API URL:",
+  `https://${
+    import.meta.env.VITE_SHOPIFY_STORE_DOMAIN
+  }/api/2024-01/graphql.json`
+);
+console.log(
+  "Token present:",
+  !!import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
 );
 
 // Query to fetch all products
@@ -212,19 +227,30 @@ interface CartItem {
 
 export async function fetchProducts() {
   try {
+    if (
+      !import.meta.env.VITE_SHOPIFY_STORE_DOMAIN ||
+      !import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    ) {
+      throw new Error("Missing required environment variables");
+    }
+
     const data = await storefrontClient.request<ProductsResponse>(GET_PRODUCTS);
-    
-    return data.products.edges.map(edge => {
-      const ingredientsField = edge.node.metafields?.find(field => field.key === 'ingredients');
+
+    return data.products.edges.map((edge) => {
+      const ingredientsField = edge.node.metafields?.find(
+        (field) => field.key === "ingredients"
+      );
       const ingredientRefs = ingredientsField?.references?.edges || [];
-      
+
       const ingredients = ingredientRefs
-        .map(ref => {
+        .map((ref) => {
           const fields = ref.node?.fields || [];
-          return fields.find(field => field?.key === 'label')?.value;
+          return fields.find((field) => field?.key === "label")?.value;
         })
-        .filter((value): value is string => value !== undefined && value !== null);
-      
+        .filter(
+          (value): value is string => value !== undefined && value !== null
+        );
+
       return {
         id: edge.node.id,
         name: edge.node.title,
@@ -233,40 +259,58 @@ export async function fetchProducts() {
         price: parseFloat(edge.node.variants.edges[0].node.price.amount),
         image: edge.node.images.edges[0]?.node.url,
         variantId: edge.node.variants.edges[0].node.id,
-        ingredients
+        ingredients,
       };
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      error,
+      envVars: {
+        storeDomain: import.meta.env.VITE_SHOPIFY_STORE_DOMAIN
+          ? "Present"
+          : "Missing",
+        accessToken: import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+          ? "Present"
+          : "Missing",
+      },
+    });
     throw error;
   }
 }
 
 export async function fetchProductByHandle(handle: string) {
   try {
-    const data = await storefrontClient.request<ProductByHandleResponse>(GET_PRODUCT_BY_HANDLE, { handle });
+    const data = await storefrontClient.request<ProductByHandleResponse>(
+      GET_PRODUCT_BY_HANDLE,
+      { handle }
+    );
     const product = data.productByHandle;
-    
+
     // Debug logs
-    console.log('Raw Product Data:', product);
-    const ingredientsField = product.metafields?.find(field => field.key === 'ingredients');
-    console.log('Ingredients Field:', ingredientsField);
+    console.log("Raw Product Data:", product);
+    const ingredientsField = product.metafields?.find(
+      (field) => field.key === "ingredients"
+    );
+    console.log("Ingredients Field:", ingredientsField);
     const ingredientRefs = ingredientsField?.references?.edges || [];
-    console.log('Ingredient References:', ingredientRefs);
-    
+    console.log("Ingredient References:", ingredientRefs);
+
     const ingredients = ingredientRefs
-      .map(ref => {
-        console.log('Processing Reference:', ref);
+      .map((ref) => {
+        console.log("Processing Reference:", ref);
         const fields = ref.node?.fields || [];
-        console.log('Reference Fields:', fields);
-        const value = fields.find(field => field?.key === 'label')?.value;
-        console.log('Found Value:', value);
+        console.log("Reference Fields:", fields);
+        const value = fields.find((field) => field?.key === "label")?.value;
+        console.log("Found Value:", value);
         return value;
       })
-      .filter((value): value is string => value !== undefined && value !== null);
-    
-    console.log('Final Ingredients List:', ingredients);
-    
+      .filter(
+        (value): value is string => value !== undefined && value !== null
+      );
+
+    console.log("Final Ingredients List:", ingredients);
+
     return {
       id: product.id,
       name: product.title,
@@ -275,17 +319,17 @@ export async function fetchProductByHandle(handle: string) {
       price: parseFloat(product.variants.edges[0].node.price.amount),
       image: product.images.edges[0]?.node.url,
       variantId: product.variants.edges[0].node.id,
-      ingredients
+      ingredients,
     };
   } catch (error) {
-    console.error('Error fetching product:', error);
+    console.error("Error fetching product:", error);
     throw error;
   }
 }
 
 export async function createShopifyCheckout(cartItems: CartItem[]) {
   try {
-    const lines = cartItems.map(item => ({
+    const lines = cartItems.map((item) => ({
       merchandiseId: item.variantId,
       quantity: item.quantity,
     }));
@@ -300,7 +344,7 @@ export async function createShopifyCheckout(cartItems: CartItem[]) {
       cartCreate: {
         cart: { checkoutUrl: string };
         userErrors: Array<{ field: string; message: string }>;
-      }
+      };
     }>(CREATE_CART, variables);
 
     if (response.cartCreate.userErrors.length > 0) {
@@ -309,7 +353,7 @@ export async function createShopifyCheckout(cartItems: CartItem[]) {
 
     return response.cartCreate.cart.checkoutUrl;
   } catch (error) {
-    console.error('Error creating checkout:', error);
+    console.error("Error creating checkout:", error);
     throw error;
   }
 }
