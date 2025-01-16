@@ -1,5 +1,4 @@
 import { GraphQLClient } from 'graphql-request';
-import { Meta } from 'react-router-dom';
 
 interface ShopifyMetafieldReference {
   fields: Array<{
