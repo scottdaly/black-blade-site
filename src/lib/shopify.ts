@@ -215,12 +215,10 @@ interface CartItem {
 
 export async function fetchProducts() {
   try {
-    console.log(
-      "Fetching products, api key:",
-      import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
-    );
+    console.log("Fetching products");
     const data = await storefrontClient.request<ProductsResponse>(GET_PRODUCTS);
-
+    console.log("Got products");
+    console.log("Products data:", data);
     return data.products.edges.map((edge) => {
       const ingredientsField = edge.node.metafields?.find(
         (field) => field.key === "ingredients"
