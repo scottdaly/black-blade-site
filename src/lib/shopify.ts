@@ -63,7 +63,7 @@ interface ProductByHandleResponse {
 const storefrontClient = new GraphQLClient(
   `https://${
     import.meta.env.VITE_SHOPIFY_STORE_DOMAIN
-  }/api/2024-01/graphql.json`,
+  }/api/2025-01/graphql.json`,
   {
     headers: {
       "X-Shopify-Storefront-Access-Token":
