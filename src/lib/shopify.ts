@@ -215,6 +215,10 @@ interface CartItem {
 
 export async function fetchProducts() {
   try {
+    console.log(
+      "Fetching products, api key:",
+      import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    );
     const data = await storefrontClient.request<ProductsResponse>(GET_PRODUCTS);
 
     return data.products.edges.map((edge) => {
