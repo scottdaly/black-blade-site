@@ -73,18 +73,6 @@ const storefrontClient = new GraphQLClient(
   }
 );
 
-// Add this debug log after client initialization
-console.log(
-  "API URL:",
-  `https://${
-    import.meta.env.VITE_SHOPIFY_STORE_DOMAIN
-  }/api/2024-01/graphql.json`
-);
-console.log(
-  "Token present:",
-  !!import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
-);
-
 // Query to fetch all products
 const GET_PRODUCTS = `
   query GetProducts {
@@ -227,13 +215,6 @@ interface CartItem {
 
 export async function fetchProducts() {
   try {
-    if (
-      !import.meta.env.VITE_SHOPIFY_STORE_DOMAIN ||
-      !import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
-    ) {
-      throw new Error("Missing required environment variables");
-    }
-
     const data = await storefrontClient.request<ProductsResponse>(GET_PRODUCTS);
 
     return data.products.edges.map((edge) => {
@@ -263,18 +244,7 @@ export async function fetchProducts() {
       };
     });
   } catch (error) {
-    console.error("Error details:", {
-      message: error instanceof Error ? error.message : "Unknown error",
-      error,
-      envVars: {
-        storeDomain: import.meta.env.VITE_SHOPIFY_STORE_DOMAIN
-          ? "Present"
-          : "Missing",
-        accessToken: import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN
-          ? "Present"
-          : "Missing",
-      },
-    });
+    console.error("Error fetching products:", error);
     throw error;
   }
 }
