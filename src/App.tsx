@@ -115,16 +115,16 @@ function App() {
                         <h3 className="font-semibold text-lg font-['Oswald']">
                           {item.name}
                         </h3>
-                        <p className="text-gray-800 font-semibold">
+                        <p className="text-gray-800 font-['Oswald']">
                           ${item.price.toFixed(2)}
                         </p>
                       </div>
-                      <p className="text-gray-600">${item.price.toFixed(2)}</p>
+                      <p className="text-gray-600">Men's Deodorant</p>
                       <div className="flex flex-row justify-between w-full">
-                        <div className="flex items-center space-x-4 mt-2 py-1 px-2 border border-zinc-300 rounded-xl w-fit">
+                        <div className="flex items-center space-x-4 mt-2 border border-zinc-300 rounded-lg w-fit">
                           <button
                             onClick={() => updateQuantity(item.id, -1)}
-                            className="p-1 hover:bg-gray-100 text-emerald-800 rounded"
+                            className="p-2 hover:bg-gray-100 text-emerald-800 rounded-l-lg"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
@@ -133,7 +133,7 @@ function App() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, 1)}
-                            className="p-1 hover:bg-gray-100 text-emerald-800 rounded"
+                            className="p-2 hover:bg-gray-100 text-emerald-800 rounded-r-lg"
                           >
                             <Plus className="w-4 h-4" />
                           </button>

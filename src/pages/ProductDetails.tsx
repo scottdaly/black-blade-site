@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Shield, ArrowLeft } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import { Product, CartItem } from '../types/product';
-import { fetchProductByHandle } from '../lib/shopify';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Shield, ArrowLeft, Plus, Minus } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { Product, CartItem } from "../types/product";
+import { fetchProductByHandle } from "../lib/shopify";
 
 interface ProductDetailsProps {
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: Omit<CartItem, "quantity">) => void;
 }
 
 export default function ProductDetails({ addToCart }: ProductDetailsProps) {
@@ -14,11 +14,12 @@ export default function ProductDetails({ addToCart }: ProductDetailsProps) {
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const loadProduct = async () => {
       if (!handle) {
-        navigate('/products');
+        navigate("/products");
         return;
       }
 
@@ -26,8 +27,8 @@ export default function ProductDetails({ addToCart }: ProductDetailsProps) {
         const productData = await fetchProductByHandle(handle);
         setProduct(productData);
       } catch (error) {
-        console.error('Failed to fetch product:', error);
-        navigate('/products');
+        console.error("Failed to fetch product:", error);
+        navigate("/products");
       } finally {
         setLoading(false);
       }
@@ -35,6 +36,10 @@ export default function ProductDetails({ addToCart }: ProductDetailsProps) {
 
     loadProduct();
   }, [handle, navigate]);
+
+  const updateQuantity = (change: number) => {
+    setQuantity((prev) => Math.max(1, prev + change));
+  };
 
   if (loading) {
     return (
@@ -53,7 +58,7 @@ export default function ProductDetails({ addToCart }: ProductDetailsProps) {
       <div className="max-w-6xl mx-auto px-8 py-12">
         <button
           onClick={() => {
-            navigate('/products');
+            navigate("/products");
             window.scrollTo(0, 0);
           }}
           className="flex items-center text-gray-600 hover:text-black mb-8"
@@ -70,46 +75,102 @@ export default function ProductDetails({ addToCart }: ProductDetailsProps) {
               className="w-full rounded-lg shadow-lg"
             />
           </div>
-          
+
           <div>
-            <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-            <p className="text-3xl font-bold mb-6">${product.price.toFixed(2)}</p>
+            <p className="text-xl font-bold mb-6">
+              ${product.price.toFixed(2)}
+            </p>
+            <h1 className="text-5xl font-['Oswald'] font-bold mb-4">
+              {product.name}
+            </h1>
+
             <div className="prose prose-lg max-w-none mb-8">
               <ReactMarkdown
                 components={{
-                  p: ({ children }) => <p className="text-gray-600 text-lg leading-relaxed mb-4 whitespace-pre-line">{children}</p>,
-                  h1: ({ children }) => <h1 className="text-2xl font-bold mb-4 text-gray-900">{children}</h1>,
-                  h2: ({ children }) => <h2 className="text-xl font-bold mb-3 text-gray-900">{children}</h2>,
-                  h3: ({ children }) => <h3 className="text-lg font-bold mb-2 text-gray-900">{children}</h3>,
-                  ul: ({ children }) => <ul className="list-disc pl-6 mb-4 space-y-2 text-gray-600">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal pl-6 mb-4 space-y-2 text-gray-600">{children}</ol>,
+                  p: ({ children }) => (
+                    <p className="text-gray-600 text-lg leading-relaxed mb-4 whitespace-pre-line">
+                      {children}
+                    </p>
+                  ),
+                  h1: ({ children }) => (
+                    <h1 className="text-2xl font-bold mb-4 text-gray-900">
+                      {children}
+                    </h1>
+                  ),
+                  h2: ({ children }) => (
+                    <h2 className="text-xl font-bold mb-3 text-gray-900">
+                      {children}
+                    </h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className="text-lg font-bold mb-2 text-gray-900">
+                      {children}
+                    </h3>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="list-disc pl-6 mb-4 space-y-2 text-gray-600">
+                      {children}
+                    </ul>
+                  ),
+                  ol: ({ children }) => (
+                    <ol className="list-decimal pl-6 mb-4 space-y-2 text-gray-600">
+                      {children}
+                    </ol>
+                  ),
                   li: ({ children }) => <li>{children}</li>,
-                  strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
-                  em: ({ children }) => <em className="italic text-gray-900">{children}</em>,
-                  br: () => <br className="mb-4" />
+                  strong: ({ children }) => (
+                    <strong className="font-semibold text-gray-900">
+                      {children}
+                    </strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className="italic text-gray-900">{children}</em>
+                  ),
+                  br: () => <br className="mb-4" />,
                 }}
               >
-                {product.description.replace(/\n/g, '  \n')}
+                {product.description.replace(/\n/g, "  \n")}
               </ReactMarkdown>
             </div>
-            
-            <button
-              onClick={() => addToCart({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                image: product.image,
-                variantId: product.variantId
-              })}
-              className="w-full bg-black text-white py-4 rounded-full hover:bg-gray-800 transition-colors mb-8"
-            >
-              Add to Cart
-            </button>
+
+            <div className="flex flex-col gap-5 md:flex-row items-center mb-8 w-full">
+              <div className="flex items-center space-x-4 border border-zinc-300 rounded-xl md:w-fit w-full justify-between">
+                <button
+                  onClick={() => updateQuantity(-1)}
+                  className="p-4 hover:bg-gray-100 text-emerald-800 rounded-l-xl"
+                >
+                  <Minus className="w-5 h-5" />
+                </button>
+                <span className="text-lg font-['Oswald'] min-w-[1.5rem] text-center">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => updateQuantity(1)}
+                  className="p-4 hover:bg-gray-100 text-emerald-800 rounded-r-xl"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+              <button
+                onClick={() => {
+                  for (let i = 0; i < quantity; i++) {
+                    addToCart({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.image,
+                      variantId: product.variantId,
+                    });
+                  }
+                }}
+                className="w-full bg-black text-white py-4 rounded-xl hover:bg-gray-800 transition-colors"
+              >
+                Add to Cart
+              </button>
+            </div>
 
             {/* Debug section */}
-            <div className="hidden">
-              {JSON.stringify(product.ingredients)}
-            </div>
+            <div className="hidden">{JSON.stringify(product.ingredients)}</div>
 
             {product.ingredients && product.ingredients.length > 0 ? (
               <div className="mb-8">
@@ -145,4 +206,4 @@ export default function ProductDetails({ addToCart }: ProductDetailsProps) {
       </div>
     </div>
   );
-} 
+}
