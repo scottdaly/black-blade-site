@@ -1,5 +1,6 @@
 import { Droplets, Leaf, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import heroImage from "../assets/images/hero-desktop.png";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function Home() {
       <header className="relative h-screen">
         <div className="absolute inset-0">
           <img
-            src="/src/assets/images/hero-desktop.png"
+            src={heroImage}
             alt="Natural ingredients"
             className="w-full h-screen object-cover"
           />
