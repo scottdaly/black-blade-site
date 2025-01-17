@@ -1,6 +1,5 @@
-import { Grid, Shield, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
 import { Product, CartItem } from "../types/product";
 import { useState } from "react";
 
