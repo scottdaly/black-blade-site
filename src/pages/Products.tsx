@@ -98,11 +98,11 @@ export default function Products({
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-black"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg overflow-hidden border border-transparent hover:border-zinc-400 cursor-pointer transition-colors duration-200"
+                className="bg-white rounded-lg overflow-hidden border border-transparent hover:border-slate-400 cursor-pointer transition-colors duration-200 mb-2"
                 onClick={(e) => handleCardClick(product.handle, e)}
               >
                 <div className="relative">

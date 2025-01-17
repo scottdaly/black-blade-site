@@ -6,6 +6,11 @@ import mobileHeroImage from "../assets/images/hero-mobile.png";
 export default function Home() {
   const navigate = useNavigate();
 
+  const handleShopCollection = () => {
+    navigate("/products");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <header className="h-[calc(100vh-64px)]">
@@ -34,7 +39,7 @@ export default function Home() {
             Transport yourself to the a mystic woods with our new scent.
           </p>
           <button
-            onClick={() => navigate("/products")}
+            onClick={handleShopCollection}
             className="bg-white text-black text-sm md:text-md w-fit hover:bg-zinc-100 px-8 md:py-4 py-2 rounded-lg font-semibold transition-colors"
           >
             Shop Now
@@ -85,7 +90,7 @@ export default function Home() {
             throughout your day.
           </p>
           <button
-            onClick={() => navigate("/products")}
+            onClick={handleShopCollection}
             className="inline-flex items-center bg-black text-white px-8 py-4 rounded-full hover:bg-gray-800 transition-colors"
           >
             Shop Our Collection
