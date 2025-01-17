@@ -8,35 +8,34 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="relative h-screen">
-        <div className="absolute inset-0">
+      <header className="h-[calc(100vh-64px)]">
+        <div className="absolute inset-0 top-[64px]">
           <img
             src={heroImage}
             alt="Natural ingredients"
-            className="hidden md:block w-full h-screen object-cover"
+            className="hidden md:block w-full h-[calc(100vh-64px)] object-cover"
           />
           <img
             src={mobileHeroImage}
             alt="Natural ingredients"
-            className="md:hidden block w-full h-screen object-cover"
+            className="md:hidden block w-full h-[calc(100vh-64px)] object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+          <div className="absolute inset-0 md:bg-gradient-to-r bg-gradient-to-b from-black/50 to-transparent md:opacity-20 opacity-50" />
         </div>
 
-        <div className="relative z-10 flex flex-col md:justify-center items-center md:items-start h-[90%] md:pl-[20%] px-4 text-center md:text-left pt-12 md:pt-0">
-          <p className="text-white text-sm mb-2 uppercase bg-emerald-900 px-4 py-2 rounded-md w-fit">
+        <div className="relative z-10 flex flex-col md:justify-center items-center md:items-start h-full md:pl-[20%] px-12 md:px-4 text-center md:text-left pt-8 md:pt-0">
+          <p className="text-white text-xs md:text-sm md:mb-6 mb-4 uppercase bg-emerald-900 px-4 py-2 rounded-md w-fit">
             ALL NEW SCENT
           </p>
-          <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-7xl 2xl:text-9xl font-['Oswald'] font-bold text-white mb-2">
             Vanilla & Pine
           </h2>
-          <p className="text-xl text-white mb-8 max-w-2xl">
-            Experience the cutting edge of natural deodorants with our
-            aluminum-free, organic formula that keeps you fresh all day.
+          <p className="md:text-2xl text-md text-white mb-4 md:mb-8 max-w-lg text-balance">
+            Transport yourself to the a mystic woods with our new scent.
           </p>
           <button
             onClick={() => navigate("/products")}
-            className="bg-white text-black w-fit hover:bg-zinc-100 px-8 py-4 rounded-full font-semibold transition-colors"
+            className="bg-white text-black text-sm md:text-md w-fit hover:bg-zinc-100 px-8 md:py-4 py-2 rounded-lg font-semibold transition-colors"
           >
             Shop Now
           </button>
