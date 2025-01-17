@@ -1,5 +1,4 @@
 import { Droplets, Leaf, Shield } from "lucide-react";
-import ShopifyProducts from "./Test";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -68,10 +67,6 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </section>
-
-      <section>
-        <ShopifyProducts />
       </section>
 
       <section id="about" className="py-20 px-8">
