@@ -1,6 +1,7 @@
 import { Droplets, Leaf, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "../assets/images/hero-desktop.png";
+import mobileHeroImage from "../assets/images/hero-mobile.png";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -12,12 +13,17 @@ export default function Home() {
           <img
             src={heroImage}
             alt="Natural ingredients"
-            className="w-full h-screen object-cover"
+            className="hidden md:block w-full h-screen object-cover"
+          />
+          <img
+            src={mobileHeroImage}
+            alt="Natural ingredients"
+            className="md:hidden block w-full h-screen object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
         </div>
 
-        <div className="relative z-10 flex flex-col justify-center h-[90%] pl-[20%]">
+        <div className="relative z-10 flex flex-col md:justify-center items-center md:items-start h-[90%] md:pl-[20%] px-4 text-center md:text-left pt-12 md:pt-0">
           <p className="text-white text-sm mb-2 uppercase bg-emerald-900 px-4 py-2 rounded-md w-fit">
             ALL NEW SCENT
           </p>
