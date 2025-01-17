@@ -13,6 +13,7 @@ function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     console.log("Loading products");
@@ -44,6 +45,12 @@ function App() {
   };
 
   const updateQuantity = (id: string, change: number) => {
+    const item = cartItems.find((item) => item.id === id);
+    if (item && item.quantity === 1 && change === -1) {
+      setItemToDelete(id);
+      return;
+    }
+
     setCartItems((prevItems) =>
       prevItems
         .map((item) =>
@@ -56,7 +63,16 @@ function App() {
   };
 
   const removeItem = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setItemToDelete(id);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.id !== itemToDelete)
+      );
+      setItemToDelete(null);
+    }
   };
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -169,9 +185,60 @@ function App() {
     </div>
   );
 
+  // Delete confirmation modal
+  const renderDeleteModal = () => {
+    const itemToRemove = cartItems.find((item) => item.id === itemToDelete);
+    if (!itemToRemove) return null;
+
+    return (
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity z-[60] ${
+          itemToDelete ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setItemToDelete(null)}
+      >
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-white rounded-lg shadow-xl p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex gap-4">
+            <img
+              src={itemToRemove.image}
+              alt={itemToRemove.name}
+              className="w-32 h-32 object-cover rounded"
+            />
+            <div>
+              <h3 className="text-xl text-gray-600 font-['Oswald'] mb-2">
+                {itemToRemove.name}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to remove this item from your cart?
+              </p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setItemToDelete(null)}
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {renderCart()}
+      {renderDeleteModal()}
       <Nav totalItems={totalItems} onCartOpen={() => setIsCartOpen(true)} />
       <Routes>
         <Route path="/" element={<Home />} />
