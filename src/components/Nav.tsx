@@ -32,11 +32,34 @@ export default function Nav({ totalItems, onCartOpen }: NavProps) {
           onClick={() => handleNavigation("/")}
           className="flex flex-row gap-2 hover:cursor-pointer justify-center items-center text-[1.5rem] font-semibold text-white hover:opacity-80 transition-colors font-['Oswald'] absolute left-1/2 -translate-x-1/2 tracking-wide"
         >
-          <img
+          {/* <img
             src={logo}
             alt="Black Blade"
             className="w-[1.25rem] h-[1.4rem] pt-[0.15rem]"
-          />
+          /> */}
+          <div className="">
+            <svg
+              width="101"
+              height="128"
+              viewBox="0 0 101 128"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-[1.25rem] h-[1.45rem] pt-[0.15rem]"
+            >
+              <rect
+                width="16"
+                height="129.389"
+                transform="matrix(1 0 -0.172789 0.984959 84.2695 0)"
+                fill="white"
+              />
+              <rect
+                width="49.9133"
+                height="129.389"
+                transform="matrix(1 0 -0.172789 0.984959 22.3555 0)"
+                fill="white"
+              />
+            </svg>
+          </div>
           BLACK BLADE
         </div>
         {/* 

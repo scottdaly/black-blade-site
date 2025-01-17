@@ -27,10 +27,10 @@ export default function Home() {
           <p className="text-white text-xs md:text-sm md:mb-6 mb-4 uppercase bg-emerald-900 px-4 py-2 rounded-md w-fit">
             ALL NEW SCENT
           </p>
-          <h2 className="text-4xl md:text-7xl 2xl:text-9xl font-['Oswald'] font-bold text-white mb-2">
+          <h2 className="text-5xl md:text-7xl 2xl:text-9xl font-['Oswald'] font-bold text-white mb-2">
             Vanilla & Pine
           </h2>
-          <p className="md:text-2xl text-md text-white mb-4 md:mb-8 max-w-lg text-balance">
+          <p className="text-md md:text-2xl 2xl:text-3xl text-white mb-4 md:mb-8 max-w-lg 2xl:max-w-4xl text-balance">
             Transport yourself to the a mystic woods with our new scent.
           </p>
           <button
